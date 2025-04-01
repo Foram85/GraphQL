@@ -1,0 +1,90 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Comment {
+  id: String!
+  content: String!
+  createdAt: Date!
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  createdAt: Date!
+  comments: [Comment!]
+}
+
+type User {
+  id: ID!
+  profilePicture: String
+  name: String!
+  email: String!
+  password: String!
+  mobile: String!
+  phone: String! @deprecated(reason: "Use 'mobile' instead of 'phone'")
+  createdAt: Date!
+  posts: [Post!]
+}
+
+type AuthResponse {
+  accessToken: String!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type Query {
+  getUsers(id: String): [User!]!
+  getPost(filter: FilterPost, pagination: Pagination, id: String): [Post!]!
+  getCommentsbyUser(userId: String): [Comment!]!
+}
+
+input FilterPost {
+  title: String
+  content: String
+}
+
+input Pagination {
+  limit: Int = 10
+  skip: Int = 0
+}
+
+type Mutation {
+  createUser(input: CreateUser!): User!
+  logIn(email: String!, password: String!): AuthResponse!
+  uploadProfilePicture(file: Upload!): String!
+  updateUser(input: UpdateUser!): User!
+  deleteUser: String!
+  createPost(input: CreatePost!): Post!
+  deletePost(id: String!): String!
+  createComment(input: CreateComment!): Comment!
+  deleteComment(id: String!): String!
+}
+
+input CreateUser {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UpdateUser {
+  name: String
+  email: String
+  phone: String
+}
+
+input CreatePost {
+  title: String!
+  content: String!
+}
+
+input CreateComment {
+  content: String!
+  postId: ID!
+}
